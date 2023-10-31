@@ -1,0 +1,44 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600;700&display=swap");
+
+:root {
+	font-family: "Josefin Sans", sans-serif;
+	font-weight: 400;
+	font-size: 18px;
+	color: #fff;
+	line-height: 140%;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+button {
+	cursor: pointer;
+}
+
+html,
+body {
+	height: 100%;
+}
+
+body {
+	background-image: url("/bg/night.jpeg");
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.c-button {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 50%;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+	background: rgba(255, 255, 255, 0.15);
+	height: 30px;
+	width: 30px;
+	color: #fff;
+	padding: 4px 0 0 0;
+}
