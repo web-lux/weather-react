@@ -32,9 +32,9 @@ export default function Header() {
 				</div>
 				<nav aria-labelledby="watched-cities-title">
 					<ul>
-						<li>Nantes</li>
-						<li>Londres</li>
-						<li>Paris</li>
+						<li tabIndex={0}>Nantes</li>
+						<li tabIndex={0}>Londres</li>
+						<li tabIndex={0}>Paris</li>
 					</ul>
 				</nav>
 			</div>
