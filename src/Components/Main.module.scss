@@ -38,6 +38,7 @@
 
 .details {
 	display: flex;
+	flex-wrap: wrap;
 	gap: 20px;
 
 	li {
@@ -58,5 +59,23 @@
 		.detailsData {
 			font-size: 2rem;
 		}
+	}
+}
+
+@media screen and (max-width: 375px) {
+	.mainInfos {
+		flex-direction: column;
+		gap: 0;
+		text-align: center;
+
+		.dataTemp,
+		.dataWeather {
+			margin-bottom: 20px;
+		}
+	}
+
+	.city {
+		text-align: center;
+		margin-bottom: 20px;
 	}
 }

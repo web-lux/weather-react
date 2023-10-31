@@ -6,6 +6,10 @@
 	font-size: 18px;
 	color: #fff;
 	line-height: 1.4;
+
+	@media screen and (max-width: 375px) {
+		font-size: 14px;
+	}
 }
 
 * {
@@ -19,13 +23,15 @@ button {
 }
 
 html,
-body {
+body,
+#root,
+.wrapper {
 	height: 100%;
 }
 
 body {
 	background-image: url("/bg/night.jpeg");
-	background-size: cover;
+	background-size: cover cover;
 	background-repeat: no-repeat;
 	background-position: center;
 }
@@ -41,4 +47,17 @@ body {
 	width: 30px;
 	color: #fff;
 	padding: 4px 0 0 0;
+}
+
+.wrapper {
+	padding: 20px;
+	min-width: 320px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+
+	header {
+		align-self: flex-end;
+		min-width: min(100%, 400px);
+	}
 }
