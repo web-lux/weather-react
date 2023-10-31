@@ -179,3 +179,19 @@ template {
 [hidden] {
 	display: none;
 }
+
+/* Lux */
+
+button {
+	border: none;
+	background: none;
+}
+
+input[type="text"],
+textarea {
+	color: inherit;
+}
+
+ul li {
+	list-style-type: none;
+}
