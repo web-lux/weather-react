@@ -15,7 +15,7 @@ function App() {
 	function getCoords() {
 		navigator.geolocation.getCurrentPosition(
 			(pos) => {
-				/* newCoords and prevState necessary to prevent getCoords() and getCityFromCoords() from overwriting each other, resulting in no change in currentCity */
+				/* newCoords and prevState necessary to prevent getCoords() and getCityFromCoords() from overwriting each other, resulting in no changes in currentCity */
 				const newCoords = {
 					latitude: pos.coords.latitude,
 					longitude: pos.coords.longitude,
