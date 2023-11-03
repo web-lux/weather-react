@@ -1,6 +1,6 @@
 import style from "./Main.module.scss";
 
-export default function Main() {
+export default function Main({ currentCity }) {
 	return (
 		<main>
 			<div className={style.mainInfos}>
@@ -14,7 +14,7 @@ export default function Main() {
 				</div>
 			</div>
 
-			<div className={style.city}>Saint-Amand-Les-Eaux</div>
+			<div className={style.city}>{currentCity.name}</div>
 
 			<ul className={style.details}>
 				<li>
