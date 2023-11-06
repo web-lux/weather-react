@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Header from "./Components/Header";
 import Main from "./Components/Main";
 import toast from "react-hot-toast";
+import { getCoordsFromGeolocation, getCityFromCoords } from "./Utils/functions";
 
 function App() {
 	const [currentCity, setCurrentCity] = useState({
@@ -12,42 +13,29 @@ function App() {
 		},
 	});
 
-	function getCoords() {
-		return new Promise<GeolocationCoordinates>((resolve, reject) => {
-			navigator.geolocation.getCurrentPosition(
-				(pos) => {
-					resolve(pos.coords);
-				},
-				(error) => {
-					reject(error);
-				}
-			);
-		});
-	}
-
 	function handleArrival() {
 		let newCity = { ...currentCity };
 
-		getCoords()
-			.then((res) => {
+		getCoordsFromGeolocation()
+			.then((coordinates) => {
 				newCity.coords = {
-					latitude: res.latitude,
-					longitude: res.longitude,
+					latitude: coordinates.latitude,
+					longitude: coordinates.longitude,
 				};
 				return getCityFromCoords(
-					newCity.coords.latitude,
-					newCity.coords.longitude
+					coordinates.latitude,
+					coordinates.longitude
 				);
 			})
-			.then((res) => {
-				if (res.length === 1) {
-					newCity.name = res[0].name;
+			.then((cityArr) => {
+				if (cityArr.length === 1) {
+					newCity.name = cityArr[0].name;
 					return newCity;
 				} else {
 					throw new Error();
 				}
 			})
-			.then((res) => setCurrentCity(res))
+			.then((newCity) => setCurrentCity(newCity))
 			.catch((err) =>
 				toast.error(
 					`Une erreur s'est produite avec la géolocalisation. ${
@@ -55,34 +43,6 @@ function App() {
 					} Par défaut, votre ville a été définie comme Paris.`
 				)
 			);
-	}
-
-	function getCityFromCoords(latitude: number, longitude: number) {
-		return new Promise<
-			| []
-			| [
-					{
-						name: string;
-						lat: number;
-						lon: number;
-						country: string;
-						state: string;
-					}
-			  ]
-		>((resolve, reject) => {
-			fetch(
-				`http://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=97e7e5fa800dc78285eb9b4de0225ca5`
-			)
-				.then((res) => {
-					if (res.ok) {
-						return res.json();
-					} else {
-						throw new Error();
-					}
-				})
-				.then((res) => resolve(res))
-				.catch((err) => reject(err));
-		});
 	}
 
 	useEffect(() => {
