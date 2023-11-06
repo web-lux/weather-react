@@ -13,42 +13,80 @@ function App() {
 	});
 
 	function getCoords() {
-		navigator.geolocation.getCurrentPosition(
-			(pos) => {
-				/* newCoords and prevState necessary to prevent getCoords() and getCityFromCoords() from overwriting each other, resulting in no changes in currentCity */
-				const newCoords = {
-					latitude: pos.coords.latitude,
-					longitude: pos.coords.longitude,
+		return new Promise<GeolocationCoordinates>((resolve, reject) => {
+			navigator.geolocation.getCurrentPosition(
+				(pos) => {
+					resolve(pos.coords);
+				},
+				(error) => {
+					reject(error);
+				}
+			);
+		});
+	}
+
+	function handleArrival() {
+		let newCity = { ...currentCity };
+
+		getCoords()
+			.then((res) => {
+				newCity.coords = {
+					latitude: res.latitude,
+					longitude: res.longitude,
 				};
-				setCurrentCity((prevState) => ({
-					...prevState,
-					coords: newCoords,
-				}));
-				getCityFromCoords(newCoords.latitude, newCoords.longitude);
-			},
-			() => {
-				toast.error(
-					`Une erreur s'est produite avec la géolocalisation. Par défaut, votre ville a été définie comme Paris.`
+				return getCityFromCoords(
+					newCity.coords.latitude,
+					newCity.coords.longitude
 				);
-			}
-		);
+			})
+			.then((res) => {
+				if (res.length === 1) {
+					newCity.name = res[0].name;
+					return newCity;
+				} else {
+					throw new Error();
+				}
+			})
+			.then((res) => setCurrentCity(res))
+			.catch((err) =>
+				toast.error(
+					`Une erreur s'est produite avec la géolocalisation. ${
+						err.code ? `(Code: ${err.code})` : ""
+					} Par défaut, votre ville a été définie comme Paris.`
+				)
+			);
 	}
 
 	function getCityFromCoords(latitude: number, longitude: number) {
-		fetch(
-			`http://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&appid=c497f79e9c527796a8bdde79ad8a0557`
-		)
-			.then((res) => res.json())
-			.then((res) => {
-				setCurrentCity((prevState) => ({
-					...prevState,
-					name: res[0]["name"],
-				}));
-			});
+		return new Promise<
+			| []
+			| [
+					{
+						name: string;
+						lat: number;
+						lon: number;
+						country: string;
+						state: string;
+					}
+			  ]
+		>((resolve, reject) => {
+			fetch(
+				`http://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=97e7e5fa800dc78285eb9b4de0225ca5`
+			)
+				.then((res) => {
+					if (res.ok) {
+						return res.json();
+					} else {
+						throw new Error();
+					}
+				})
+				.then((res) => resolve(res))
+				.catch((err) => reject(err));
+		});
 	}
 
 	useEffect(() => {
-		getCoords();
+		handleArrival();
 	}, []);
 
 	return (
