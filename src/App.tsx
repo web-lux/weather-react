@@ -48,6 +48,7 @@ function App() {
 	function handleWeather(latitude: number, longitude:number) {
 		fetchData(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=97e7e5fa800dc78285eb9b4de0225ca5&units=metric&lang=fr`)
 			.then((res) => {
+				console.log(res)
 				setCurrentWeather(res)
 			})
 			.catch((err) => {
@@ -63,7 +64,7 @@ function App() {
 	return (
 		<div className="wrapper">
 			<Header />
-			<Main currentCity={currentCity} />
+			<Main currentCity={currentCity} currentWeather={currentWeather} />
 		</div>
 	);
 }
