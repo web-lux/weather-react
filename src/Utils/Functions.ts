@@ -11,22 +11,9 @@ export function getCoordsFromGeolocation() {
 	});
 }
 
-export function getCityFromCoords(latitude: number, longitude: number) {
-	return new Promise<
-		| []
-		| [
-				{
-					name: string;
-					lat: number;
-					lon: number;
-					country: string;
-					state: string;
-				}
-		  ]
-	>((resolve, reject) => {
-		fetch(
-			`http://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=97e7e5fa800dc78285eb9b4de0225ca5`
-		)
+export function fetchData(url: string): Promise<any> {
+	return new Promise((resolve, reject) => {
+		fetch(url)
 			.then((res) => {
 				if (res.ok) {
 					return res.json();

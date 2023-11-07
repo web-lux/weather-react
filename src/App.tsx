@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Header from "./Components/Header";
 import Main from "./Components/Main";
 import toast from "react-hot-toast";
-import { getCoordsFromGeolocation, getCityFromCoords } from "./Utils/functions";
+import { getCoordsFromGeolocation, fetchData } from "./Utils/functions";
 
 function App() {
 	const [currentCity, setCurrentCity] = useState({
@@ -22,10 +22,8 @@ function App() {
 					latitude: coordinates.latitude,
 					longitude: coordinates.longitude,
 				};
-				return getCityFromCoords(
-					coordinates.latitude,
-					coordinates.longitude
-				);
+				return fetchData(`http://api.openweathermap.org/geo/1.0/reverse?lat=${coordinates.latitude}&lon=${coordinates.longitude}&limit=1&appid=97e7e5fa800dc78285eb9b4de0225ca5`)
+				// calls reverse geocoding API to get the name of the place corresponding to the user's coordinates
 			})
 			.then((cityArr) => {
 				if (cityArr.length === 1) {
