@@ -22,7 +22,7 @@ export default function Main({ currentCity, currentWeather }) {
 						<img src="/icons/thermometer.svg" alt="" />
 						<h3>Se ressent comme</h3>
 					</div>
-					<span className={style.detailsData}>{currentWeather.main.feels_like}°</span>
+					<span className={style.detailsData}>{currentWeather && currentWeather.main.feels_like}°</span>
 				</li>
 
 				<li>
