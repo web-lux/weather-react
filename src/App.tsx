@@ -13,6 +13,8 @@ function App() {
 		},
 	});
 
+	const [currentWeather, setCurrentWeather] = useState(null);
+
 	function handleArrival() {
 		let newCity = { ...currentCity };
 
@@ -43,8 +45,19 @@ function App() {
 			);
 	}
 
+	function handleWeather(latitude: number, longitude:number) {
+		fetchData(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=97e7e5fa800dc78285eb9b4de0225ca5&units=metric&lang=fr`)
+			.then((res) => {
+				setCurrentWeather(res)
+			})
+			.catch((err) => {
+				toast.error(`Une erreur s'est produite durant la recherche de données météo. Merci de réessayer plus tard.`);
+			})
+	}
+
 	useEffect(() => {
 		handleArrival();
+		handleWeather(currentCity.coords.latitude, currentCity.coords.longitude);
 	}, []);
 
 	return (
