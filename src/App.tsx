@@ -3,17 +3,13 @@ import Header from "./Components/Header";
 import Main from "./Components/Main";
 import toast from "react-hot-toast";
 import { getCoordsFromGeolocation, fetchData } from "./Utils/functions";
+import { cityPlaceholder, weatherPlaceholder } from "./Utils/placeholder";
 
 function App() {
-	const [currentCity, setCurrentCity] = useState({
-		name: "Paris",
-		coords: {
-			latitude: 48.866667,
-			longitude: 2.333333,
-		},
-	});
 
-	const [currentWeather, setCurrentWeather] = useState(null);
+	const [currentCity, setCurrentCity] = useState(cityPlaceholder);
+
+	const [currentWeather, setCurrentWeather] = useState(weatherPlaceholder);
 
 	function handleArrival() {
 		let newCity = { ...currentCity };
@@ -58,7 +54,6 @@ function App() {
 
 	useEffect(() => {
 		handleArrival();
-		handleWeather(currentCity.coords.latitude, currentCity.coords.longitude);
 	}, []);
 
 	return (
