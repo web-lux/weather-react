@@ -75,7 +75,7 @@ function App() {
 
 	return (
 		<div className="wrapper">
-			<Header />
+			<Header setCurrentCity={setCurrentCity} />
 			<Main currentCity={currentCity} currentWeather={currentWeather} />
 		</div>
 	);

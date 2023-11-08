@@ -1,9 +1,35 @@
+import { useState } from "react";
 import style from "./Header.module.scss";
+import { fetchData } from "../Utils/functions";
+import toast from "react-hot-toast";
 
-export default function Header() {
+export default function Header({setCurrentCity}) {
+	const [cityInput, setCityInput] = useState('');
+
+	function handleSubmit(e:React.FormEvent<HTMLFormElement>) {
+		e.preventDefault();
+		fetchData(`http://api.openweathermap.org/geo/1.0/direct?q=${cityInput}&limit=1&appid=97e7e5fa800dc78285eb9b4de0225ca5`)
+			.then((res) => {
+				if (res.length === 1) {
+					setCurrentCity({
+						name: res[0].name,
+						coords: {
+							latitude: res[0].lat,
+							longitude: res[0].lon
+						}
+					})
+				} else {
+					toast.error("Aucune ville trouvée à ce nom. Êtes-vous sûr de l'avoir bien ortographié ?")
+				}
+			})
+			.catch(() => {
+				toast.error(`Une erreur s'est produite durant la recherche de données géographiques. Merci de réessayer plus tard.`)
+		})
+	}
+
 	return (
 		<header className={`${style.header} glass`}>
-			<form action="/" method="get">
+			<form action="/" method="get" onSubmit={(e) => handleSubmit(e)}>
 				<label htmlFor="search-city" id="search-label" hidden>
 					Rechercher une ville :
 				</label>
@@ -14,6 +40,8 @@ export default function Header() {
 					placeholder="Rechercher une ville..."
 					aria-labelledby="search-label"
 					required
+					value={cityInput}
+					onChange={(e) => setCityInput(e.target.value)}
 				/>
 				<button type="submit" aria-label="Rechercher ville">
 					<img src="/icons/paper-plane.svg" alt="" />
