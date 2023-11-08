@@ -9,6 +9,21 @@ interface HeaderProps {
 	currentCity: City;
 }
 
+function CityRow({city, handleWatch}) {
+	return (
+		<li tabIndex={0}>
+			{city.name}
+			<button
+				className="c-button"
+				aria-label="Retirer la ville sélectionnée des villes suivies"
+				onClick={() => handleWatch("remove", city)}
+			>
+				<img src="/icons/eye-minus.svg" alt="" />
+			</button>
+		</li>
+	);
+}
+
 export default function Header({ setCurrentCity, currentCity }: HeaderProps) {
 	const [cityInput, setCityInput] = useState("");
 	const [citiesArr, setCitiesArr] = useState<any>([]);
@@ -41,24 +56,21 @@ export default function Header({ setCurrentCity, currentCity }: HeaderProps) {
 			});
 	}
 
-	function handleWatch(action: string) {
-		if (
-			action === "add"
-		) {
-			if (!citiesArr.some((city: City) => city.name === currentCity.name)) {
-				setCitiesArr([...citiesArr, currentCity])
+	function handleWatch(action: string, city?:any) {
+		if (action === "add") {
+			if (!citiesArr.some((element: City) => element.name === currentCity.name)) {
+				setCitiesArr([...citiesArr, currentCity]);
 			} else {
-				toast.error(`${currentCity.name} figure déjà dans les villes suivies.`)
+				toast.error(`${currentCity.name} figure déjà dans les villes suivies.`);
 			}
+		} else if (action === "remove") {
+			const filteredArr = citiesArr.filter((element:City) => element.name !== city.name);
+			setCitiesArr(filteredArr);
 		}
 	}
 
 	const citiesList = citiesArr.map((city: City) => {
-		return (
-			<li tabIndex={0} key={city.name}>
-				{city.name}
-			</li>
-		);
+		return <CityRow city={city} handleWatch={handleWatch} key={city.name}/>
 	});
 
 	return (

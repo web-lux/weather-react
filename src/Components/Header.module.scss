@@ -72,6 +72,16 @@
 				font-weight: 300;
 				padding: 2px 4px 0 6px;
 				cursor: pointer;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+
+				button {
+					$size: 20px;
+					height: $size;
+					width: $size;
+					margin-bottom: 2px;
+				}
 			}
 		}
 	}
