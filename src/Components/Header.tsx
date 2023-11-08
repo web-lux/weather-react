@@ -5,32 +5,61 @@ import toast from "react-hot-toast";
 import City from "../Interfaces/city";
 
 interface HeaderProps {
-	setCurrentCity: Dispatch<City>
+	setCurrentCity: Dispatch<City>;
+	currentCity: City;
 }
 
-export default function Header({setCurrentCity}:HeaderProps) {
-	const [cityInput, setCityInput] = useState('');
+export default function Header({ setCurrentCity, currentCity }: HeaderProps) {
+	const [cityInput, setCityInput] = useState("");
+	const [citiesArr, setCitiesArr] = useState<any>([]);
 
-	function handleSubmit(e:React.FormEvent<HTMLFormElement>) {
+	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
-		fetchData(`http://api.openweathermap.org/geo/1.0/direct?q=${cityInput}&limit=1&appid=97e7e5fa800dc78285eb9b4de0225ca5`)
+		fetchData(
+			`http://api.openweathermap.org/geo/1.0/direct?q=${cityInput}&limit=1&appid=97e7e5fa800dc78285eb9b4de0225ca5`
+		)
 			.then((res) => {
 				if (res.length === 1) {
+					console.log(res);
 					setCurrentCity({
 						name: res[0].name,
 						coords: {
 							latitude: res[0].lat,
-							longitude: res[0].lon
-						}
-					})
+							longitude: res[0].lon,
+						},
+					});
 				} else {
-					toast.error("Aucune ville trouvée à ce nom. Êtes-vous sûr de l'avoir bien ortographié ?")
+					toast.error(
+						"Aucune ville trouvée à ce nom. Êtes-vous sûr de l'avoir bien ortographié ?"
+					);
 				}
 			})
 			.catch(() => {
-				toast.error(`Une erreur s'est produite durant la recherche de données géographiques. Merci de réessayer plus tard.`)
-		})
+				toast.error(
+					`Une erreur s'est produite durant la recherche de données géographiques. Merci de réessayer plus tard.`
+				);
+			});
 	}
+
+	function handleWatch(action: string) {
+		if (
+			action === "add"
+		) {
+			if (!citiesArr.some((city: City) => city.name === currentCity.name)) {
+				setCitiesArr([...citiesArr, currentCity])
+			} else {
+				toast.error(`${currentCity.name} figure déjà dans les villes suivies.`)
+			}
+		}
+	}
+
+	const citiesList = citiesArr.map((city: City) => {
+		return (
+			<li tabIndex={0} key={city.name}>
+				{city.name}
+			</li>
+		);
+	});
 
 	return (
 		<header className={`${style.header} glass`}>
@@ -59,16 +88,15 @@ export default function Header({setCurrentCity}:HeaderProps) {
 					<button
 						aria-label="Ajouter la ville actuelle aux villes suivies"
 						className="c-button"
+						onClick={() => {
+							handleWatch("add");
+						}}
 					>
 						<img src="/icons/eye-plus.svg" alt="" />
 					</button>
 				</div>
 				<nav aria-labelledby="watched-cities-title">
-					<ul>
-						<li tabIndex={0}>Nantes</li>
-						<li tabIndex={0}>Londres</li>
-						<li tabIndex={0}>Paris</li>
-					</ul>
+					<ul>{citiesList}</ul>
 				</nav>
 			</div>
 		</header>
