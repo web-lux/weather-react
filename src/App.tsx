@@ -8,7 +8,6 @@ import { cityPlaceholder, weatherPlaceholder } from "./Utils/placeholder";
 function App() {
 
 	const [currentCity, setCurrentCity] = useState(cityPlaceholder);
-
 	const [currentWeather, setCurrentWeather] = useState(weatherPlaceholder);
 
 	function handleArrival() {
@@ -31,7 +30,9 @@ function App() {
 					throw new Error();
 				}
 			})
-			.then((newCity) => setCurrentCity(newCity))
+			.then((newCity) => {
+				setCurrentCity(newCity);
+			})
 			.catch((err) =>
 				toast.error(
 					`Une erreur s'est produite avec la géolocalisation. ${
@@ -41,11 +42,23 @@ function App() {
 			);
 	}
 
-	function handleWeather(latitude: number, longitude:number) {
+	function handleWeather(latitude: number, longitude: number) {
 		fetchData(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=97e7e5fa800dc78285eb9b4de0225ca5&units=metric&lang=fr`)
 			.then((res) => {
-				console.log(res)
-				setCurrentWeather(res)
+				setCurrentWeather({
+					main: {
+						feels_like: res.main.feels_like,
+						humidity: res.main.humidity,
+						temp: res.main.res
+					},
+					weather: {
+						description: res.weather[0].description,
+						icon: res.weather[0].icon
+					},
+					wind: {
+						speed: res.wind.speed
+					}
+				})
 			})
 			.catch((err) => {
 				toast.error(`Une erreur s'est produite durant la recherche de données météo. Merci de réessayer plus tard.`);
@@ -55,6 +68,10 @@ function App() {
 	useEffect(() => {
 		handleArrival();
 	}, []);
+
+	useEffect(() => {
+		handleWeather(currentCity.coords.latitude, currentCity.coords.longitude)
+	}, [currentCity])
 
 	return (
 		<div className="wrapper">
