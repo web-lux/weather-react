@@ -1,9 +1,14 @@
-import { useState } from "react";
+import { Dispatch, useState } from "react";
 import style from "./Header.module.scss";
 import { fetchData } from "../Utils/functions";
 import toast from "react-hot-toast";
+import City from "../Interfaces/city";
 
-export default function Header({setCurrentCity}) {
+interface HeaderProps {
+	setCurrentCity: Dispatch<City>
+}
+
+export default function Header({setCurrentCity}:HeaderProps) {
 	const [cityInput, setCityInput] = useState('');
 
 	function handleSubmit(e:React.FormEvent<HTMLFormElement>) {
