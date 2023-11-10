@@ -14,7 +14,7 @@ export default function Main({ currentCity, currentWeather }: MainProps) {
 				<img src={currentWeather.weather.icon !== "" ? `https://openweathermap.org/img/wn/${currentWeather.weather.icon}@2x.png` : "/weather-img/clear.png"} alt="" />
 				<div>
 					<div className={style.dataTemp}>
-						<span>23°</span>
+						<span>{currentWeather.main.temp}</span>
 						<button className="c-button">C°</button>
 					</div>
 					<span className={style.dataWeather}>{currentWeather.weather.description}</span>
