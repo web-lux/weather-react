@@ -4,6 +4,9 @@ import Main from "./Components/Main";
 import toast from "react-hot-toast";
 import { getCoordsFromGeolocation, fetchData } from "./Utils/functions";
 import { cityPlaceholder, weatherPlaceholder } from "./Utils/placeholder";
+import City from "./Interfaces/city";
+import { GeocodingAPI } from "./Interfaces/geocodingAPI";
+import { WeatherAPI } from "./Interfaces/weatherAPI";
 
 function App() {
 
@@ -11,10 +14,11 @@ function App() {
 	const [currentWeather, setCurrentWeather] = useState(weatherPlaceholder);
 
 	function handleArrival() {
-		let newCity = { ...currentCity };
+		let newCity:City = { ...currentCity };
 
 		getCoordsFromGeolocation()
-			.then((coordinates) => {
+			// change "coords" property of newCity to the latitude and longitude of the user position returned by the navigator geolocation API
+			.then((coordinates:GeolocationCoordinates) => {
 				newCity.coords = {
 					latitude: coordinates.latitude,
 					longitude: coordinates.longitude,
@@ -22,15 +26,20 @@ function App() {
 				return fetchData(`http://api.openweathermap.org/geo/1.0/reverse?lat=${coordinates.latitude}&lon=${coordinates.longitude}&limit=1&appid=97e7e5fa800dc78285eb9b4de0225ca5`)
 				// calls reverse geocoding API to get the name of the place corresponding to the user's coordinates
 			})
-			.then((cityArr) => {
+			.then((cityArr:[GeocodingAPI]) => {
+				// if the geocoding API returns something, change the name of the newCity object properties and return it
 				if (cityArr.length === 1) {
+					console.log(cityArr)
 					newCity.name = cityArr[0].name;
 					return newCity;
 				} else {
+					// if somehow the geocoding API doesn't return anything, the placeholder city, Paris, stays
 					throw new Error();
 				}
 			})
-			.then((newCity) => {
+			.then((newCity: City) => {
+
+				// if there's no error, change currentCity from a placeholder to the city of the user, obtained via geolocation
 				setCurrentCity(newCity);
 			})
 			.catch((err) =>
@@ -44,12 +53,12 @@ function App() {
 
 	function handleWeather(latitude: number, longitude: number) {
 		fetchData(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=97e7e5fa800dc78285eb9b4de0225ca5&units=metric&lang=fr`)
-			.then((res) => {
+			.then((res: WeatherAPI) => {
 				setCurrentWeather({
 					main: {
 						feels_like: res.main.feels_like,
 						humidity: res.main.humidity,
-						temp: res.main.res
+						temp: res.main.temp
 					},
 					weather: {
 						description: res.weather[0].description,
@@ -66,10 +75,12 @@ function App() {
 	}
 
 	useEffect(() => {
+		// on page load, try to get the user's city via geolocation
 		handleArrival();
 	}, []);
 
 	useEffect(() => {
+		// if currentCity changes, handleWeather() is called again with the right coordinates
 		handleWeather(currentCity.coords.latitude, currentCity.coords.longitude)
 	}, [currentCity])
 
