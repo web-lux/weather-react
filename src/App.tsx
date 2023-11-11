@@ -9,6 +9,7 @@ import { City, GeocodingAPI, WeatherAPI } from "./Utils/interfaces";
 function App() {
 	const [currentCity, setCurrentCity] = useState(cityPlaceholder);
 	const [currentWeather, setCurrentWeather] = useState(weatherPlaceholder);
+	const [arrivalHandled, setArrivalHandled] = useState(false);
 
 	function handleArrival() {
 		let newCity: City = { ...currentCity };
@@ -38,14 +39,19 @@ function App() {
 			.then((newCity: City) => {
 				// if there's no error, change currentCity from a placeholder to the city of the user, obtained via geolocation
 				setCurrentCity(newCity);
+				setArrivalHandled(true);
 			})
-			.catch((err) =>
+			.catch((err) => {
 				toast.error(
 					`Une erreur s'est produite avec la géolocalisation. ${
 						err.code ? `(Code: ${err.code})` : ""
 					} Par défaut, votre ville a été définie comme Paris.`
-				)
-			);
+				);
+				handleWeather(
+					currentCity.coords.latitude,
+					currentCity.coords.longitude
+				);
+			});
 	}
 
 	function handleWeather(latitude: number, longitude: number) {
@@ -81,8 +87,10 @@ function App() {
 	}, []);
 
 	useEffect(() => {
-		// if currentCity changes, handleWeather() is called again with the right coordinates
-		handleWeather(currentCity.coords.latitude, currentCity.coords.longitude);
+		if (arrivalHandled) {
+			// if currentCity changes, handleWeather() is called again with the right coordinates
+			handleWeather(currentCity.coords.latitude, currentCity.coords.longitude);
+		}
 	}, [currentCity]);
 
 	return (
