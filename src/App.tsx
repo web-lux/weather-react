@@ -9,27 +9,28 @@ import { GeocodingAPI } from "./Interfaces/geocodingAPI";
 import { WeatherAPI } from "./Interfaces/weatherAPI";
 
 function App() {
-
 	const [currentCity, setCurrentCity] = useState(cityPlaceholder);
 	const [currentWeather, setCurrentWeather] = useState(weatherPlaceholder);
 
 	function handleArrival() {
-		let newCity:City = { ...currentCity };
+		let newCity: City = { ...currentCity };
 
 		getCoordsFromGeolocation()
 			// change "coords" property of newCity to the latitude and longitude of the user position returned by the navigator geolocation API
-			.then((coordinates:GeolocationCoordinates) => {
+			.then((coordinates: GeolocationCoordinates) => {
 				newCity.coords = {
 					latitude: coordinates.latitude,
 					longitude: coordinates.longitude,
 				};
-				return fetchData(`http://api.openweathermap.org/geo/1.0/reverse?lat=${coordinates.latitude}&lon=${coordinates.longitude}&limit=1&appid=97e7e5fa800dc78285eb9b4de0225ca5`)
 				// calls reverse geocoding API to get the name of the place corresponding to the user's coordinates
+				return fetchData(
+					`http://api.openweathermap.org/geo/1.0/reverse?lat=${coordinates.latitude}&lon=${coordinates.longitude}&limit=1&appid=97e7e5fa800dc78285eb9b4de0225ca5`
+				);
 			})
-			.then((cityArr:[GeocodingAPI]) => {
+			.then((cityArr: [GeocodingAPI]) => {
 				// if the geocoding API returns something, change the name of the newCity object properties and return it
 				if (cityArr.length === 1) {
-					console.log(cityArr)
+					console.log(cityArr);
 					newCity.name = cityArr[0].name;
 					return newCity;
 				} else {
@@ -38,7 +39,6 @@ function App() {
 				}
 			})
 			.then((newCity: City) => {
-
 				// if there's no error, change currentCity from a placeholder to the city of the user, obtained via geolocation
 				setCurrentCity(newCity);
 			})
@@ -52,26 +52,30 @@ function App() {
 	}
 
 	function handleWeather(latitude: number, longitude: number) {
-		fetchData(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=97e7e5fa800dc78285eb9b4de0225ca5&units=metric&lang=fr`)
+		fetchData(
+			`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=97e7e5fa800dc78285eb9b4de0225ca5&units=metric&lang=fr`
+		)
 			.then((res: WeatherAPI) => {
 				setCurrentWeather({
 					main: {
 						feels_like: res.main.feels_like,
 						humidity: res.main.humidity,
-						temp: res.main.temp
+						temp: res.main.temp,
 					},
 					weather: {
 						description: res.weather[0].description,
-						icon: res.weather[0].icon
+						icon: res.weather[0].icon,
 					},
 					wind: {
-						speed: res.wind.speed
-					}
-				})
+						speed: res.wind.speed,
+					},
+				});
 			})
 			.catch((err) => {
-				toast.error(`Une erreur s'est produite durant la recherche de données météo. Merci de réessayer plus tard.`);
-			})
+				toast.error(
+					`Une erreur s'est produite durant la recherche de données météo. Merci de réessayer plus tard.`
+				);
+			});
 	}
 
 	useEffect(() => {
@@ -81,8 +85,8 @@ function App() {
 
 	useEffect(() => {
 		// if currentCity changes, handleWeather() is called again with the right coordinates
-		handleWeather(currentCity.coords.latitude, currentCity.coords.longitude)
-	}, [currentCity])
+		handleWeather(currentCity.coords.latitude, currentCity.coords.longitude);
+	}, [currentCity]);
 
 	return (
 		<div className="wrapper">
