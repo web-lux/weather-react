@@ -28,8 +28,7 @@ function App() {
 			.then((cityArr: [GeocodingAPI]) => {
 				// if the geocoding API returns something, change the name of the newCity object properties and return it
 				if (cityArr.length === 1) {
-					console.log(cityArr);
-					newCity.name = cityArr[0].name;
+					newCity.name = cityArr[0].local_names.eu;
 					return newCity;
 				} else {
 					// if somehow the geocoding API doesn't return anything, the placeholder city, Paris, stays

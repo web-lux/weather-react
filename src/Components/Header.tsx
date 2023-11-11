@@ -50,7 +50,7 @@ export default function Header({ setCurrentCity, currentCity }: HeaderProps) {
 				if (res.length === 1) {
 					console.log(res);
 					setCurrentCity({
-						name: res[0].name,
+						name: res[0].local_names.eu,
 						coords: {
 							latitude: res[0].lat,
 							longitude: res[0].lon,
