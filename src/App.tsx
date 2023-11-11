@@ -4,9 +4,7 @@ import Main from "./Components/Main";
 import toast from "react-hot-toast";
 import { getCoordsFromGeolocation, fetchData } from "./Utils/functions";
 import { cityPlaceholder, weatherPlaceholder } from "./Utils/placeholder";
-import City from "./Interfaces/city";
-import { GeocodingAPI } from "./Interfaces/geocodingAPI";
-import { WeatherAPI } from "./Interfaces/weatherAPI";
+import { City, GeocodingAPI, WeatherAPI } from "./Utils/interfaces";
 
 function App() {
 	const [currentCity, setCurrentCity] = useState(cityPlaceholder);

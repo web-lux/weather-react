@@ -1,6 +1,5 @@
 import style from "./Main.module.scss";
-import City from "../Interfaces/city"
-import Weather from "../Interfaces/weather";
+import { City, Weather } from "../Utils/interfaces";
 import { useState } from "react";
 
 interface MainProps {

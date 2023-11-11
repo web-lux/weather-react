@@ -1,3 +1,35 @@
+export interface City {
+	name: string;
+	coords: {
+		latitude: number;
+		longitude: number;
+	};
+}
+
+export interface GeocodingAPI {
+	name: string;
+	local_names: { [key: string]: string };
+	lat: number;
+	lon: number;
+	country: string;
+	state?: string;
+}
+
+export interface Weather {
+	main: {
+		feels_like: number;
+		humidity: number;
+		temp: number;
+	};
+	weather: {
+		description: string;
+		icon: string;
+	};
+	wind: {
+		speed: number;
+	};
+}
+
 export interface WeatherAPI {
 	coord: Coord;
 	weather: WeatherElement[];

@@ -2,14 +2,20 @@ import { Dispatch, useState } from "react";
 import style from "./Header.module.scss";
 import { fetchData } from "../Utils/functions";
 import toast from "react-hot-toast";
-import City from "../Interfaces/city";
+import { City } from "../Utils/interfaces";
 
 interface HeaderProps {
 	setCurrentCity: Dispatch<City>;
 	currentCity: City;
 }
 
-function CityRow({ city, handleWatch, setCurrentCity }) {
+interface CityRowProps {
+	city: City;
+	handleWatch: (action: string, city?: City) => void;
+	setCurrentCity: Dispatch<City>
+}
+
+function CityRow({ city, handleWatch, setCurrentCity }:CityRowProps) {
 	function handleClick() {
 		setCurrentCity(city)
 	}
@@ -63,7 +69,7 @@ export default function Header({ setCurrentCity, currentCity }: HeaderProps) {
 			});
 	}
 
-	function handleWatch(action: string, city?: any) {
+	function handleWatch(action: string, city?: City) {
 		if (action === "add") {
 			if (
 				!citiesArr.some((element: City) => element.name === currentCity.name)
@@ -72,7 +78,7 @@ export default function Header({ setCurrentCity, currentCity }: HeaderProps) {
 			} else {
 				toast.error(`${currentCity.name} figure déjà dans les villes suivies.`);
 			}
-		} else if (action === "remove") {
+		} else if (action === "remove" && city) {
 			const filteredArr = citiesArr.filter(
 				(element: City) => element.name !== city.name
 			);

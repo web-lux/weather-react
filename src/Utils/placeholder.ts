@@ -1,5 +1,4 @@
-import City from "../Interfaces/city";
-import Weather from "../Interfaces/weather";
+import { City, Weather } from "./interfaces";
 
 export const cityPlaceholder: City = {
 	name: "Paris",
