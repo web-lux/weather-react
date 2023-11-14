@@ -51,6 +51,7 @@ function App() {
 					currentCity.coords.latitude,
 					currentCity.coords.longitude
 				);
+				setArrivalHandled(true);
 			});
 	}
 
