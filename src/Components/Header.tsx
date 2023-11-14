@@ -12,12 +12,12 @@ interface HeaderProps {
 interface CityRowProps {
 	city: City;
 	handleWatch: (action: string, city?: City) => void;
-	setCurrentCity: Dispatch<City>
+	setCurrentCity: Dispatch<City>;
 }
 
-function CityRow({ city, handleWatch, setCurrentCity }:CityRowProps) {
+function CityRow({ city, handleWatch, setCurrentCity }: CityRowProps) {
 	function handleClick() {
-		setCurrentCity(city)
+		setCurrentCity(city);
 	}
 
 	return (
@@ -48,7 +48,6 @@ export default function Header({ setCurrentCity, currentCity }: HeaderProps) {
 		)
 			.then((res) => {
 				if (res.length === 1) {
-					console.log(res);
 					setCurrentCity({
 						name: res[0].name,
 						coords: {
@@ -87,7 +86,14 @@ export default function Header({ setCurrentCity, currentCity }: HeaderProps) {
 	}
 
 	const citiesList = citiesArr.map((city: City) => {
-		return <CityRow city={city} handleWatch={handleWatch} key={city.name} setCurrentCity={setCurrentCity}/>;
+		return (
+			<CityRow
+				city={city}
+				handleWatch={handleWatch}
+				key={city.name}
+				setCurrentCity={setCurrentCity}
+			/>
+		);
 	});
 
 	return (

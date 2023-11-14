@@ -12,9 +12,7 @@ export default function Main({ currentCity, currentWeather }: MainProps) {
 	const [isUnitCelsius, setIsUnitCelsius] = useState(true)
 
 	function changeUnit() {
-		console.log(isUnitCelsius);
 		setIsUnitCelsius((prev) => !prev);
-		console.log(isUnitCelsius)
 	}
 
 	return (
