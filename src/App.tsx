@@ -75,7 +75,7 @@ function App() {
 					},
 				});
 			})
-			.catch((err) => {
+			.catch(() => {
 				toast.error(
 					`Une erreur s'est produite durant la recherche de données météo. Merci de réessayer plus tard.`
 				);
