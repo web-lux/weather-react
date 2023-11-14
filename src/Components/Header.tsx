@@ -44,7 +44,7 @@ export default function Header({ setCurrentCity, currentCity }: HeaderProps) {
 	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 		fetchData(
-			`http://api.openweathermap.org/geo/1.0/direct?q=${cityInput}&limit=1&appid=97e7e5fa800dc78285eb9b4de0225ca5`
+			`https://api.openweathermap.org/geo/1.0/direct?q=${cityInput}&limit=1&appid=97e7e5fa800dc78285eb9b4de0225ca5`
 		)
 			.then((res) => {
 				if (res.length === 1) {

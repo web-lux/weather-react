@@ -23,7 +23,7 @@ function App() {
 				};
 				// calls reverse geocoding API to get the name of the place corresponding to the user's coordinates
 				return fetchData(
-					`http://api.openweathermap.org/geo/1.0/reverse?lat=${coordinates.latitude}&lon=${coordinates.longitude}&limit=1&appid=97e7e5fa800dc78285eb9b4de0225ca5`
+					`https://api.openweathermap.org/geo/1.0/reverse?lat=${coordinates.latitude}&lon=${coordinates.longitude}&limit=1&appid=97e7e5fa800dc78285eb9b4de0225ca5`
 				);
 			})
 			.then((cityArr: [GeocodingAPI]) => {
