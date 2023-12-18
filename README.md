@@ -1,4 +1,4 @@
-▶️ [Demo](https://shopping-cart-weblux.vercel.app/)
+▶️ [Demo](https://weather-react-three.vercel.app/)
 
 ## 📄 Description
 
